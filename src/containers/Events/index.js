@@ -13,11 +13,9 @@ const EventList = () => {
   const { data, error } = useData();
   const [type, setType] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+  // Display all events or it filters events that are === state
   const filteredEvents = (
-    (!type
-      ? data?.events
-      : data?.events) || []
-  ).filter((event, index) => {
+      (!type ? data?.events : data?.events.filter((event) => event.type === type)) || []).filter((event, index) => {
     if (
       (currentPage - 1) * PER_PAGE <= index &&
       PER_PAGE * currentPage > index
@@ -26,9 +24,12 @@ const EventList = () => {
     }
     return false;
   });
+  // Function to change the type depending on the selection in the Select component
   const changeType = (evtType) => {
-    setCurrentPage(1);
-    setType(evtType);
+    // Check whether the type has changed before resetting currentPage
+     if (evtType !== type)
+    setCurrentPage(1); // Resets the page to 1 if the type changes
+    setType(evtType); // Updates the type
   };
   const pageNumber = Math.floor((filteredEvents?.length || 0) / PER_PAGE) + 1;
   const typeList = new Set(data?.events.map((event) => event.type));
