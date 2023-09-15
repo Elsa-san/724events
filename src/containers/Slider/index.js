@@ -7,24 +7,33 @@ import "./style.scss";
 const Slider = () => {
   const { data } = useData();
   const [index, setIndex] = useState(0);
-  const byDateDesc = data?.focus.sort((evtA, evtB) =>
-    new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
+  const byDateDesc = data?.focus?.sort((evtA, evtB) =>
+  // change the sort (more recent > less recent, the sign was in the wrong way)
+    new Date(evtA.date) > new Date(evtB.date) ? -1 : 1
   );
   const nextCard = () => {
-    setTimeout(
-      () => setIndex(index < byDateDesc.length ? index + 1 : 0),
-      5000
-    );
-  };
+   const timer = setTimeout(() => {
+      if (byDateDesc && byDateDesc.length > 0) {
+        setIndex(index < byDateDesc.length - 1 ? index + 1 : 0);
+      } else {
+        // Handle the case where byDateDesc is undefined or empty
+        // back on the first element 
+        setIndex(0);
+      }
+    }, 5000);
+return () => {
+  clearTimeout(timer) // Cancel the blank
+}
+}
+    
   useEffect(() => {
     nextCard();
   });
   return (
     <div className="SlideCardList">
       {byDateDesc?.map((event, idx) => (
-        <>
-          <div
-            key={event.id}
+          <div key={event.title}>
+            <div
             className={`SlideCard SlideCard--${
               index === idx ? "display" : "hide"
             }`}
@@ -40,17 +49,18 @@ const Slider = () => {
           </div>
           <div className="SlideCard__paginationContainer">
             <div className="SlideCard__pagination">
-              {byDateDesc.map((_, radioIdx) => (
+              {byDateDesc.map((focus, radioIdx) => (
                 <input
-                  key={`${event.id}`}
+                  key={`${focus.title}`} // key modification
                   type="radio"
-                  name="radio-button"
-                  checked={idx === radioIdx}
+                  name={`radio-button ${radioIdx}`}
+                  checked={index === radioIdx} // change idx for index for the radio buttons
+                  onChange={() => nextCard(radioIdx)}
                 />
               ))}
             </div>
           </div>
-        </>
+        </div>
       ))}
     </div>
   );
