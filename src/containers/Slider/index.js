@@ -9,7 +9,7 @@ const Slider = () => {
   const [index, setIndex] = useState(0);
   const byDateDesc = data?.focus?.sort((evtA, evtB) =>
   // change the sort (more recent > less recent, the sign was in the wrong way)
-    new Date(evtA.date) > new Date(evtB.date) ? -1 : 1
+    new Date(evtA.date) > new Date(evtB.date) ? 1 : -1
   );
   const nextCard = () => {
    const timer = setTimeout(() => {
