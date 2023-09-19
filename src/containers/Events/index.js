@@ -31,6 +31,7 @@ const EventList = () => {
     setCurrentPage(1); // Resets the page to 1 if the type changes
     setType(evtType); // Updates the type
   };
+  filteredEvents.sort((eventA, eventB) => new Date(eventA.date) - new Date(eventB.date)) // to sort the months (more close to less close)
   const pageNumber = Math.floor((filteredEvents?.length || 0) / PER_PAGE) + 1;
   const typeList = new Set(data?.events.map((event) => event.type));
   return (
