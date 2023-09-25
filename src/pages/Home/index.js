@@ -122,7 +122,7 @@ const Page = () => {
             title={LastData?.title !== undefined ? LastData.title : ""}
             date={new Date(LastData?.date)}
             small
-            label={LastData?.type}
+            label={LastData?.type || ""}
         />
       </div>
       <div className="col contact">
